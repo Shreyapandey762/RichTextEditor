@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
+import { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
+import { Button } from '@mui/material';
 
 interface RichTextEditorProps{
     triggerState: boolean
@@ -16,7 +17,6 @@ const RichTextEditor:React.FC<RichTextEditorProps> = ({ triggerState}) => {
       try {
         const rawData = JSON.parse(savedData);
         
-        // Ensure the data is in the correct format for Draft.js
         if (rawData.blocks && Array.isArray(rawData.blocks) && rawData.entityMap !== undefined) {
           const contentState = convertFromRaw(rawData);
           setEditorState(EditorState.createWithContent(contentState));
@@ -45,6 +45,12 @@ const RichTextEditor:React.FC<RichTextEditorProps> = ({ triggerState}) => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, 'UNDERLINE'));
   };
 
+  const handleSave = () => {
+    const rawContent = convertToRaw(editorState.getCurrentContent());
+    localStorage.setItem("userData", JSON.stringify(rawContent));
+};
+
+
   return (
     <div>
       <div>
@@ -57,6 +63,9 @@ const RichTextEditor:React.FC<RichTextEditorProps> = ({ triggerState}) => {
           editorState={editorState} 
           onChange={handleChange} 
         />
+      </div>
+      <div>
+        <Button variant="contained" onClick={handleSave}>Save</Button>
       </div>
     </div>
   );
