@@ -3,7 +3,7 @@ import { Button, Box, Typography } from "@mui/material";
 import { animated, useSpring } from "react-spring";
 
 const Counter: React.FC = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState<number>(0);
 
   const handleIncrement = () => setCount((prev) => prev + 1);
   const handleDecrement = () => setCount((prev) => prev - 1);
