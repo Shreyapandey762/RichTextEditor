@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
-const RichTextEditor:React.FC = () => {
+interface RichTextEditorProps{
+    triggerState: boolean
+}
+
+const RichTextEditor:React.FC<RichTextEditorProps> = ({ triggerState}) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   useEffect(() => {
@@ -23,7 +27,7 @@ const RichTextEditor:React.FC = () => {
         console.error('Error parsing user data:', error);
       }
     }
-  }, []);
+  }, [triggerState]);
 
   const handleChange = (newState:any) => {
     setEditorState(newState);

@@ -1,23 +1,20 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { convertToRaw, ContentState } from "draft-js";
+import { UserData } from "../pages/Home";
 
-// Define the interface for user data
-interface UserData {
-  id: number;
-  name: string;
-  address: string;
-  email: string;
-  phone: string;
+interface UserDataFormProps {
+  setTriggerState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UserDataForm: React.FC = () => {
+const UserDataForm: React.FC<UserDataFormProps> = ({ setTriggerState }) => {
   const [userData, setUserData] = useState<UserData>(() => {
     const savedData = localStorage.getItem("userData");
     return savedData
       ? JSON.parse(savedData)
       : { id: Date.now(), name: "", address: "", email: "", phone: "" };
   });
+
   const [isDirty, setIsDirty] = useState<boolean>(false);
 
   useEffect(() => {
@@ -33,15 +30,13 @@ const UserDataForm: React.FC = () => {
   };
 
   const handleSave = () => {
-    // Convert userData into Draft.js content
     const contentState = ContentState.createFromText(
       `Name: ${userData.name}\nAddress: ${userData.address}\nEmail: ${userData.email}\nPhone: ${userData.phone}`
     );
     const rawContent = convertToRaw(contentState);
-
-    // Save raw content in localStorage
     localStorage.setItem("userData", JSON.stringify(rawContent));
     setIsDirty(false);
+    setTriggerState((prev) => !prev);
   };
 
   return (
