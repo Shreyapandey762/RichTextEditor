@@ -1,6 +1,7 @@
 import React from "react";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import Home from "./pages/Home";
+import 'global';
 
 const theme = createTheme({
   palette: {
